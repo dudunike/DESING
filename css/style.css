@@ -1287,10 +1287,9 @@ a {
 }
 
 .popular-badge {
-    position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
+    position: relative;
+    display: inline-block;
+    margin: -25px auto 15px auto;
     background-color: var(--accent-red);
     color: #fff;
     padding: 6px 16px;
@@ -1298,6 +1297,7 @@ a {
     font-size: 0.8rem;
     font-weight: 800;
     letter-spacing: 1px;
+    z-index: 2;
 }
 
 .plan-img {
