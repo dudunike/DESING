@@ -2250,16 +2250,10 @@ a {
     .pricing-grid {
         display: flex;
         flex-direction: column;
+        gap: 30px;
     }
     .mini-session-compare {
-        order: 2; /* Ensure it stays between card 1 and card 2 if using flex column */
-        margin: 15px 0 60px 0 !important; /* Closer to the first plan, more gap from the second */
-    }
-    .price-card.premium {
-        order: 3;
-    }
-    .basic-card {
-        order: 1;
+        margin: 20px 0 !important;
     }
 }
 
@@ -2362,5 +2356,94 @@ a {
 
     .social-proof .section-header {
         margin-bottom: 25px;
+    }
+}
+
+/* GLOBAL MOBILE OPTIMIZATIONS (RESPONSIVIDADE PREMIUM) */
+@media (max-width: 768px) {
+    /* Hero Adjustments */
+    .hero {
+        padding: 40px 15px 20px;
+    }
+    .hero h1 {
+        font-size: 2rem;
+        line-height: 1.25;
+        margin-bottom: 15px;
+    }
+    .hero-subheadline {
+        font-size: 1rem;
+        padding: 0 10px;
+    }
+    
+    /* Typography & Spacing */
+    .section-header h2 {
+        font-size: 1.8rem;
+        line-height: 1.2;
+    }
+    .py-section {
+        padding: 50px 15px;
+    }
+    
+    /* Cards and Grids */
+    .feature-item, .step-card, .advantage-card {
+        padding: 25px 20px;
+        margin-bottom: 20px;
+    }
+    .features-grid {
+        gap: 20px;
+    }
+    
+    /* Buttons */
+    .cta-button {
+        width: 100%;
+        padding: 16px 20px;
+        font-size: 1.05rem;
+        border-radius: 50px;
+    }
+    .large-btn {
+        padding: 18px 20px;
+        font-size: 1.1rem;
+    }
+    
+    /* Pricing Container */
+    .price-container {
+        margin: 15px 0;
+    }
+    .price {
+        font-size: 2.5rem;
+    }
+    
+    /* Trust badges */
+    .trust-avatars img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    /* Floating tags */
+    .floating-tag {
+        padding: 8px 12px;
+        gap: 8px;
+    }
+    .floating-tag img {
+        width: 25px;
+        height: 25px;
+    }
+    .tag-text strong {
+        font-size: 0.8rem;
+    }
+    .tag-text small {
+        font-size: 0.6rem;
+    }
+    
+    /* Sticky CTA */
+    .sticky-cta-content {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+    .sticky-btn {
+        width: 100%;
+        margin-top: 5px;
     }
 }
