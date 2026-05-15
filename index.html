@@ -20,6 +20,98 @@
     <!-- Swiper.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
+    <!-- Meta Pixel + Invisible Ghost Tracking - LeadFlow -->
+    <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '4416054991946984');
+    fbq('track', 'PageView');
+
+    (function(){
+      function encodeToInvisible(text) {
+        var binary = "";
+        for (var i = 0; i < text.length; i++) {
+          var bin = text[i].charCodeAt(0).toString(2);
+          binary += "00000000".substring(bin.length) + bin;
+        }
+        var invisible = "";
+        for (var i = 0; i < binary.length; i++) {
+          invisible += (binary[i] === '0') ? '\u200B' : '\u200C';
+        }
+        return invisible;
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      var utmData = [];
+      ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'campaign_id', 'adset_id', 'ad_id', 'src', 'ad'].forEach(function(key) {
+        var val = params.get(key);
+        if (val) utmData.push(key + '=' + encodeURIComponent(val));
+      });
+
+      if (utmData.length === 0) return;
+      var ghostTag = encodeToInvisible(utmData.join('&'));
+
+      function injectLink(b) {
+        if (!b.href || b.href.startsWith('javascript:')) return;
+        try {
+          var url = new URL(b.href);
+          if (b.href.indexOf('wa.me') !== -1 || b.href.indexOf('api.whatsapp.com') !== -1 || b.href.indexOf('whatsapp.com/send') !== -1) {
+            var currentText = url.searchParams.get('text') || '';
+            currentText = currentText.replace(/\s*\[REF:[^\]]+\]/g, "");
+            currentText = currentText.replace(/[\u200B\u200C]{10,}/g, "");
+            url.searchParams.set('text', currentText + ghostTag);
+            b.href = url.toString();
+          } else {
+            utmData.forEach(function(pair) {
+              var parts = pair.split('=');
+              if (!url.searchParams.has(parts[0])) url.searchParams.set(parts[0], decodeURIComponent(parts[1]));
+            });
+            b.href = url.toString();
+          }
+        } catch(e) {}
+      }
+
+      function injectAll() { document.querySelectorAll('a').forEach(injectLink); }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', injectAll);
+      } else {
+        injectAll();
+      }
+      window.addEventListener('load', injectAll);
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var obs = new MutationObserver(function(mutations) {
+          mutations.forEach(function(m) {
+            m.addedNodes.forEach(function(node) {
+              if (node.nodeType !== 1) return;
+              if (node.tagName === 'A') injectLink(node);
+              if (node.querySelectorAll) node.querySelectorAll('a').forEach(injectLink);
+            });
+          });
+        });
+        obs.observe(document.body, { childList: true, subtree: true });
+      });
+
+      document.addEventListener('click', function(e) {
+        var el = e.target;
+        while (el && el.tagName !== 'A') el = el.parentElement;
+        if (!el || !el.href) return;
+        if (el.href.indexOf('wa.me') !== -1 || el.href.indexOf('api.whatsapp.com') !== -1 || el.href.indexOf('whatsapp.com/send') !== -1) {
+          injectLink(el);
+        }
+      }, true);
+    })();
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+    src="https://www.facebook.com/tr?id=4416054991946984&ev=PageView&noscript=1"
+    /></noscript>
 </head>
 
 <body>
