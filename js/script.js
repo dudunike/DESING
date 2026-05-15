@@ -284,5 +284,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // WhatsApp float: aparece ao chegar na seção #oferta
+    const waBtn = document.querySelector('.whatsapp-float');
+    const ofertaSection = document.getElementById('oferta');
+    if (waBtn && ofertaSection) {
+        const waObserver = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                waBtn.classList.add('visible');
+                waObserver.disconnect();
+            }
+        }, { threshold: 0.1 });
+        waObserver.observe(ofertaSection);
+    }
 });
 

@@ -1700,11 +1700,20 @@ a {
     background-color: #25d366;
     border-radius: 50%;
     display: flex;
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+    transition: opacity 0.4s ease, transform 0.4s ease;
     align-items: center;
     justify-content: center;
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
     z-index: 9999;
-    transition: all 0.3s ease;
+}
+
+.whatsapp-float.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: scale(1);
 }
 
 .whatsapp-float:hover {
