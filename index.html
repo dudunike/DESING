@@ -22,79 +22,46 @@
 
     <!-- LeadFlow: Meta Pixel 4416054991946984 + UTM Ghost Tracker -->
     <script>
-        !function (f, b, e, v, n, t, s) { if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments) }; if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s) }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '4416054991946984'); fbq('track', 'PageView');
-        (function () {
-            'use strict';
-            var p = new URLSearchParams(window.location.search);
-            var keys = ['utm_source', 'utm_campaign', 'utm_medium', 'utm_content', 'utm_term', 'campaign_id', 'adset_id', 'ad_id'];
-            var pairs = [];
-            keys.forEach(function (k) { var v = p.get(k); if (v && v.trim()) pairs.push(k + '=' + encodeURIComponent(v.trim())); });
-            if (!pairs.length) return;
-            function enc(s) {
-                var o = '';
-                for (var i = 0; i < s.length; i++) {
-                    var b = s.charCodeAt(i).toString(2);
-                    while (b.length < 8) b = '0' + b;
-                    for (var j = 0; j < 8; j++)o += b[j] === '0' ? '\u200B' : '\u200C';
-                }
-                o += '\u200B\u200B\u200B\u200B\u200B\u200B\u200B\u200B';
-                return o;
-            }
-            var ghost = enc(pairs.join('&'));
-            function inj(a) {
-                if (!a || !a.href || a.href.indexOf('javascript') === 0) return;
-                try {
-                    if (!/wa\.me|whatsapp\.com\/send|api\.whatsapp\.com/.test(a.href)) return;
-                    var u = new URL(a.href);
-                    var t = (u.searchParams.get('text') || '').replace(/[\u200B\u200C]{8,}/g, '');
-                    u.searchParams.set('text', t + ghost);
-                    a.href = u.toString();
-                } catch (e) { }
-            }
-            function all() { document.querySelectorAll('a[href]').forEach(inj); }
-            if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', all); else all();
-            window.addEventListener('load', all);
-            new MutationObserver(all).observe(document.documentElement, { childList: true, subtree: true });
-            document.addEventListener('click', function (e) {
-                var el = e.target; while (el && el.tagName !== 'A') el = el.parentElement; if (el) inj(el);
-            }, true);
-        })();
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init','4416054991946984');fbq('track','PageView');
+    (function(){
+      'use strict';
+      var p=new URLSearchParams(window.location.search);
+      var keys=['utm_source','utm_campaign','utm_medium','utm_content','utm_term','campaign_id','adset_id','ad_id'];
+      var pairs=[];
+      keys.forEach(function(k){var v=p.get(k);if(v&&v.trim())pairs.push(k+'='+encodeURIComponent(v.trim()));});
+      if(!pairs.length)return;
+      function enc(s){
+        var o='';
+        for(var i=0;i<s.length;i++){
+          var b=s.charCodeAt(i).toString(2);
+          while(b.length<8)b='0'+b;
+          for(var j=0;j<8;j++)o+=b[j]==='0'?'':'';
+        }
+        o+='';
+        return o;
+      }
+      var ghost=enc(pairs.join('&'));
+      function inj(a){
+        if(!a||!a.href||a.href.indexOf('javascript')===0)return;
+        try{
+          if(!/wa.me|whatsapp.com\/send|api.whatsapp.com/.test(a.href))return;
+          var u=new URL(a.href);
+          var t=(u.searchParams.get('text')||'').replace(/[]{8,}/g,'');
+          u.searchParams.set('text',t+ghost);
+          a.href=u.toString();
+        }catch(e){}
+      }
+      function all(){document.querySelectorAll('a[href]').forEach(inj);}
+      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all();
+      window.addEventListener('load',all);
+      new MutationObserver(all).observe(document.documentElement,{childList:true,subtree:true});
+      document.addEventListener('click',function(e){
+        var el=e.target;while(el&&el.tagName!=='A')el=el.parentElement;if(el)inj(el);
+      },true);
+    })();
     </script>
-    <script>
-        // Captura UTMs da URL e repassa para todos os links de checkout
-        (function () {
-            const params = new URLSearchParams(window.location.search);
-            const tracking = ['campaign_id', 'adset_id', 'ad_id',
-                'utm_source', 'utm_medium', 'utm_campaign',
-                'utm_content', 'utm_term'];
-
-            // Salva no sessionStorage pra não perder se o usuário rolar a página
-            tracking.forEach(k => {
-                if (params.get(k)) sessionStorage.setItem(k, params.get(k));
-            });
-
-            // Quando o DOM carregar, adiciona os UTMs em todos os links de checkout
-            document.addEventListener('DOMContentLoaded', function () {
-                const checkoutDomains = ['pay.kiwify', 'hotmart', 'checkout', 'pay.'];
-
-                document.querySelectorAll('a[href]').forEach(function (link) {
-                    const href = link.getAttribute('href') || '';
-                    const isCheckout = checkoutDomains.some(d => href.includes(d));
-                    if (!isCheckout) return;
-
-                    const url = new URL(href, window.location.origin);
-                    tracking.forEach(k => {
-                        const val = params.get(k) || sessionStorage.getItem(k);
-                        if (val) url.searchParams.set(k, val);
-                    });
-                    link.setAttribute('href', url.toString());
-                });
-            });
-        })();
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=4416054991946984&ev=PageView&noscript=1" /></noscript>
+    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4416054991946984&ev=PageView&noscript=1"/></noscript>
 </head>
 
 <body>
@@ -903,7 +870,7 @@
                         </div>
                     </div>
 
-                    <a href="https://ggcheckout.app/checkout/v5/BiTotKlhvIPY2ArGCbyw"
+                    <a href="https://wa.me/5534991559200"
                         id="btn-completo" class="cta-button opp-btn pulse-anim w-100" style="margin-bottom: 0;">QUERO O
                         PLANO
                         COMPLETO</a>
@@ -969,7 +936,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg> Receba no E-mail e WhatsApp</li>
                     </ul>
-                    <a href="https://ggcheckout.app/checkout/v5/QdOJNPZLQFBqA4vxuQ5s"
+                    <a href="https://wa.me/5534991559200"
                         id="btn-basico" class="cta-button ghost-btn w-100">QUERO O PLANO
                         BÁSICO</a>
 
@@ -1256,7 +1223,7 @@
                             <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                         </svg>
                     </a>
-                    <a href="https://ggcheckout.app/checkout/v5/BiTotKlhvIPY2ArGCbyw"
+                    <a href="https://wa.me/5534991559200"
                         target="_blank" rel="noopener noreferrer" class="social-link"
                         style="color: var(--text-muted); transition: color 0.3s; display: flex;">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"
@@ -1282,7 +1249,7 @@
                 Este site não faz parte do site do Facebook ou da Facebook Inc. Além disso, este site não é endossado
                 pelo Facebook de qualquer maneira. FACEBOOK é uma marca comercial da FACEBOOK, Inc.
             </p> <!-- WHATSAPP FLOATING BUTTON -->
-            <a href="https://ggcheckout.app/checkout/v5/BiTotKlhvIPY2ArGCbyw"
+            <a href="https://wa.me/5534991559200"
                 class="whatsapp-float" target="_blank" rel="noopener noreferrer">
                 <img src="assets/logo whatsapp.webp" alt="WhatsApp Support">
                 <span class="whatsapp-tooltip">Dúvidas? Fale conosco!</span>
@@ -1328,7 +1295,7 @@
                         </ul>
 
                         <div class="modal-actions">
-                            <a href="https://ggcheckout.app/checkout/v5/BiTotKlhvIPY2ArGCbyw"
+                            <a href="https://wa.me/5534991559200"
                                 class="cta-button primary-btn upsell-confirm">SIM! QUERO O ACESSO COMPLETO</a>
                             <button id="close-modal" class="upsell-decline">Não, quero continuar com o básico</button>
                         </div>
