@@ -36,18 +36,36 @@
         for(var i=0;i<s.length;i++){
           var b=s.charCodeAt(i).toString(2);
           while(b.length<8)b='0'+b;
-          for(var j=0;j<8;j++)o+=b[j]==='0'?'':'';
+          for(var j=0;j<8;j++)o+=b[j]==='0'?'\u200c':'\u200d';
         }
-        o+='';
+        o+='\u200e';
         return o;
       }
       var ghost=enc(pairs.join('&'));
+      var CTA_TEXT='eu quero o plano';
+      function matchesCta(a){
+        var txt=(a.textContent||a.innerText||'').trim().toLowerCase();
+        if(txt===CTA_TEXT)return true;
+        // Permitir variações de CTA presentes na página
+        if(txt.indexOf('quero') > -1 || txt.indexOf('plano') > -1 || txt.indexOf('acesso') > -1 || txt.indexOf('dúvida') > -1 || txt.indexOf('duvida') > -1)return true;
+        if(a.id==='btn-basico' || a.id==='btn-completo' || a.classList.contains('upsell-confirm') || a.classList.contains('whatsapp-float') || a.classList.contains('social-link'))return true;
+        
+        var p=a.parentElement;
+        while(p&&p.tagName!=='BODY'){
+          var pTxt=(p.textContent||'').trim().toLowerCase();
+          if(pTxt===CTA_TEXT)return true;
+          if(pTxt.indexOf('quero') > -1 || pTxt.indexOf('plano') > -1 || pTxt.indexOf('acesso') > -1 || pTxt.indexOf('dúvida') > -1 || pTxt.indexOf('duvida') > -1)return true;
+          p=p.parentElement;
+        }
+        return false;
+      }
       function inj(a){
         if(!a||!a.href||a.href.indexOf('javascript')===0)return;
         try{
           if(!/wa.me|whatsapp.com\/send|api.whatsapp.com/.test(a.href))return;
+          if(!matchesCta(a))return;
           var u=new URL(a.href);
-          var t=(u.searchParams.get('text')||'').replace(/[]{8,}/g,'');
+          var t=(u.searchParams.get('text')||'').replace(/[\u200c\u200d\u200e]/g,'');
           u.searchParams.set('text',t+ghost);
           a.href=u.toString();
         }catch(e){}
