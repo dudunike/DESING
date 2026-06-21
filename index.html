@@ -20,67 +20,6 @@
     <!-- Swiper.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <!-- LeadFlow: Meta Pixel 4416054991946984 + UTM Ghost Tracker -->
-    <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init','4416054991946984');fbq('track','PageView');
-    (function(){
-      'use strict';
-      var p=new URLSearchParams(window.location.search);
-      var keys=['utm_source','utm_campaign','utm_medium','utm_content','utm_term','campaign_id','adset_id','ad_id'];
-      var pairs=[];
-      keys.forEach(function(k){var v=p.get(k);if(v&&v.trim())pairs.push(k+'='+encodeURIComponent(v.trim()));});
-      if(!pairs.length)return;
-      function enc(s){
-        var o='';
-        for(var i=0;i<s.length;i++){
-          var b=s.charCodeAt(i).toString(2);
-          while(b.length<8)b='0'+b;
-          for(var j=0;j<8;j++)o+=b[j]==='0'?'\u200c':'\u200d';
-        }
-        o+='\u200e';
-        return o;
-      }
-      var ghost=enc(pairs.join('&'));
-      var CTA_TEXT='eu quero o plano';
-      function matchesCta(a){
-        var txt=(a.textContent||a.innerText||'').trim().toLowerCase();
-        if(txt===CTA_TEXT)return true;
-        // Permitir variações de CTA presentes na página
-        if(txt.indexOf('quero') > -1 || txt.indexOf('plano') > -1 || txt.indexOf('acesso') > -1 || txt.indexOf('dúvida') > -1 || txt.indexOf('duvida') > -1)return true;
-        if(a.id==='btn-basico' || a.id==='btn-completo' || a.classList.contains('upsell-confirm') || a.classList.contains('whatsapp-float') || a.classList.contains('social-link'))return true;
-        
-        var p=a.parentElement;
-        while(p&&p.tagName!=='BODY'){
-          var pTxt=(p.textContent||'').trim().toLowerCase();
-          if(pTxt===CTA_TEXT)return true;
-          if(pTxt.indexOf('quero') > -1 || pTxt.indexOf('plano') > -1 || pTxt.indexOf('acesso') > -1 || pTxt.indexOf('dúvida') > -1 || pTxt.indexOf('duvida') > -1)return true;
-          p=p.parentElement;
-        }
-        return false;
-      }
-      function inj(a){
-        if(!a||!a.href||a.href.indexOf('javascript')===0)return;
-        try{
-          if(!/wa.me|whatsapp.com\/send|api.whatsapp.com/.test(a.href))return;
-          if(!matchesCta(a))return;
-          var u=new URL(a.href);
-          var t=(u.searchParams.get('text')||'').replace(/[\u200c\u200d\u200e]/g,'');
-          u.searchParams.set('text',t+ghost);
-          a.href=u.toString();
-        }catch(e){}
-      }
-      function all(){document.querySelectorAll('a[href]').forEach(inj);}
-      if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',all);else all();
-      window.addEventListener('load',all);
-      new MutationObserver(all).observe(document.documentElement,{childList:true,subtree:true});
-      document.addEventListener('click',function(e){
-        var el=e.target;while(el&&el.tagName!=='A')el=el.parentElement;if(el)inj(el);
-      },true);
-    })();
-    </script>
-    <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=4416054991946984&ev=PageView&noscript=1"/></noscript>
-
     <!-- Meta Pixel Code -->
     <script>
     !function(f,b,e,v,n,t,s)
@@ -89,15 +28,105 @@
     if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
     n.queue=[];t=b.createElement(e);t.async=!0;
     t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    s.parentNode.insertBefore(t,s)}(window,document,'script',
     'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '976427731881541');
-    fbq('track', 'PageView');
+    fbq('init','4416054991946984');
+    fbq('track','PageView');
     </script>
     <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=976427731881541&ev=PageView&noscript=1"
+    src="https://www.facebook.com/tr?id=4416054991946984&ev=PageView&noscript=1"
     /></noscript>
     <!-- End Meta Pixel Code -->
+
+    <script>
+      window.pixelId = "6a36bfa83292ebaf92f0ccef";
+      var a = document.createElement("script");
+      a.setAttribute("async", "");
+      a.setAttribute("defer", "");
+      a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+      document.head.appendChild(a);
+    </script>
+
+    <!-- UTM Forwarder: passa UTMs da landing page para o checkout e dispara eventos no Pixel -->
+    <script>
+    (function () {
+      'use strict';
+
+      // 1. Captura os parâmetros UTM da URL atual da landing page
+      var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','campaign_id','adset_id','ad_id','src'];
+      var pageParams = new URLSearchParams(window.location.search);
+      var utmPairs = [];
+      UTM_KEYS.forEach(function(k) {
+        var v = pageParams.get(k);
+        if (v && v.trim()) utmPairs.push([k, v.trim()]);
+      });
+
+      // 2. Persiste UTMs no sessionStorage para não perder se a página recarregar
+      if (utmPairs.length > 0) {
+        try { sessionStorage.setItem('__g3d_utms', JSON.stringify(utmPairs)); } catch(e) {}
+      }
+
+      // 3. Recupera UTMs (da URL atual ou do storage)
+      function getUtms() {
+        if (utmPairs.length > 0) return utmPairs;
+        try {
+          var stored = sessionStorage.getItem('__g3d_utms');
+          return stored ? JSON.parse(stored) : [];
+        } catch(e) { return []; }
+      }
+
+      // 4. Adiciona UTMs nos links de checkout ao clicar
+      function injectUtmIntoLink(anchor) {
+        var href = anchor.href || '';
+        if (!href || href.indexOf('ggcheckout.app') === -1) return;
+        var utms = getUtms();
+        if (!utms.length) return;
+        try {
+          var url = new URL(href);
+          utms.forEach(function(pair) {
+            if (!url.searchParams.has(pair[0])) {
+              url.searchParams.set(pair[0], pair[1]);
+            }
+          });
+          anchor.href = url.toString();
+        } catch(e) {}
+      }
+
+      // 5. Dispara evento Meta Pixel ao clicar nos botões de CTA de compra
+      function firePurchaseEvent(anchor) {
+        var id = anchor.id || '';
+        var cls = anchor.className || '';
+        var isCheckout = anchor.href && anchor.href.indexOf('ggcheckout.app') !== -1;
+        if (!isCheckout) return;
+        if (typeof fbq === 'function') {
+          var value = (id === 'btn-basico') ? 14.90 : 37.00;
+          fbq('track', 'InitiateCheckout', { currency: 'BRL', value: value });
+        }
+      }
+
+      // 6. Aplica nos links ao carregar + no clique (à prova de links dinâmicos)
+      function applyToAll() {
+        document.querySelectorAll('a[href*="ggcheckout.app"]').forEach(injectUtmIntoLink);
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', applyToAll);
+      } else {
+        applyToAll();
+      }
+      window.addEventListener('load', applyToAll);
+
+      document.addEventListener('click', function(e) {
+        var el = e.target;
+        while (el && el.tagName !== 'A') el = el.parentElement;
+        if (el) {
+          injectUtmIntoLink(el);
+          firePurchaseEvent(el);
+        }
+      }, true);
+
+    })();
+    </script>
 </head>
 
 <body>
