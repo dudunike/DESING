@@ -20,24 +20,8 @@
     <!-- Swiper.js CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
-    <!-- Meta Pixel Code -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window,document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init','4416054991946984');
-    fbq('track','PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=4416054991946984&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
-
+    <!-- UTMify Pixel -->
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" async defer></script>
     <script>
       window.pixelId = "6a371504d6ccddd0395ea7cf";
       var a = document.createElement("script");
@@ -46,87 +30,7 @@
       a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
       document.head.appendChild(a);
     </script>
-
-    <!-- UTM Forwarder: passa UTMs da landing page para o checkout e dispara eventos no Pixel -->
-    <script>
-    (function () {
-      'use strict';
-
-      // 1. Captura os parâmetros UTM da URL atual da landing page
-      var UTM_KEYS = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','campaign_id','adset_id','ad_id','src'];
-      var pageParams = new URLSearchParams(window.location.search);
-      var utmPairs = [];
-      UTM_KEYS.forEach(function(k) {
-        var v = pageParams.get(k);
-        if (v && v.trim()) utmPairs.push([k, v.trim()]);
-      });
-
-      // 2. Persiste UTMs no sessionStorage para não perder se a página recarregar
-      if (utmPairs.length > 0) {
-        try { sessionStorage.setItem('__g3d_utms', JSON.stringify(utmPairs)); } catch(e) {}
-      }
-
-      // 3. Recupera UTMs (da URL atual ou do storage)
-      function getUtms() {
-        if (utmPairs.length > 0) return utmPairs;
-        try {
-          var stored = sessionStorage.getItem('__g3d_utms');
-          return stored ? JSON.parse(stored) : [];
-        } catch(e) { return []; }
-      }
-
-      // 4. Adiciona UTMs nos links de checkout ao clicar
-      function injectUtmIntoLink(anchor) {
-        var href = anchor.href || '';
-        if (!href || href.indexOf('ggcheckout.app') === -1) return;
-        var utms = getUtms();
-        if (!utms.length) return;
-        try {
-          var url = new URL(href);
-          utms.forEach(function(pair) {
-            if (!url.searchParams.has(pair[0])) {
-              url.searchParams.set(pair[0], pair[1]);
-            }
-          });
-          anchor.href = url.toString();
-        } catch(e) {}
-      }
-
-      // 5. Dispara evento Meta Pixel ao clicar nos botões de CTA de compra
-      function firePurchaseEvent(anchor) {
-        var id = anchor.id || '';
-        var cls = anchor.className || '';
-        var isCheckout = anchor.href && anchor.href.indexOf('ggcheckout.app') !== -1;
-        if (!isCheckout) return;
-        if (typeof fbq === 'function') {
-          var value = (id === 'btn-basico') ? 14.90 : 37.00;
-          fbq('track', 'InitiateCheckout', { currency: 'BRL', value: value });
-        }
-      }
-
-      // 6. Aplica nos links ao carregar + no clique (à prova de links dinâmicos)
-      function applyToAll() {
-        document.querySelectorAll('a[href*="ggcheckout.app"]').forEach(injectUtmIntoLink);
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyToAll);
-      } else {
-        applyToAll();
-      }
-      window.addEventListener('load', applyToAll);
-
-      document.addEventListener('click', function(e) {
-        var el = e.target;
-        while (el && el.tagName !== 'A') el = el.parentElement;
-        if (el) {
-          injectUtmIntoLink(el);
-          firePurchaseEvent(el);
-        }
-      }, true);
-
-    })();
-    </script>
+    <!-- End UTMify Pixel -->
 </head>
 
 <body>
